@@ -17,8 +17,11 @@ namespace KafkaTest
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
+            var random = new Random();
+            int randomNumber = random.Next(3300, 3600);
+
             var client = new HttpClient();
-            var response = await client.GetAsync("https://api.tibiadata.com/v2/characters/Trollefar.json");
+            var response = await client.GetAsync($"https://api.tibiadata.com/v2/news/{randomNumber}.json");
             var content = await response.Content.ReadAsStringAsync();
 
             try
