@@ -1,0 +1,37 @@
+name: KafkaWithFunctions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    env:
+      FUNCTION_APP: func-kafka-functions
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Build
+      run: dotnet build --configuration Release
+    
+    - name: Publish
+      run: dotnet publish -c Release -o app
+    
+    - name: Azure Login - Conectando com Credenciais no Azure
+      uses: Azure/login@v1.1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Azure Functions - Deployment da Function App
+      uses: Azure/functions-action@v1.1.8
+      with:
+        app-name: ${{ env.FUNCTION_APP }}
+        package: './app'
