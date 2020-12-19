@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     env:
-      FUNCTION_APP: func-kafka-functions
+      FUNCTION_APP: func-kafka
     
     runs-on: ubuntu-latest
 
